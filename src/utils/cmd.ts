@@ -60,7 +60,16 @@ export async function findNetworkBySSID(
   logger.info('find wpa_cli network by SSID', { ifname, ssid });
   const networks = await listNetworks(ifname);
   // @ts-ignore
-  return networks.find(n => n.ssid === ssid);
+  let network = networks.find(n => n.ssid === ssid);
+  if (!network) {
+    network = {
+      networkId: 0,
+      ssid: '',
+      bssid: '',
+      flags: '',
+    };
+  }
+  return network;
 }
 
 export async function setNetworkVariable(
