@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@abandonware/bleno": "^0.5.1-2",
-    "@abandonware/bluetooth-hci-socket": "^0.5.3-7",
+    "@abandonware/bluetooth-hci-socket": "0.5.3-7",
     "winston": "^3.3.2"
   }
 }
