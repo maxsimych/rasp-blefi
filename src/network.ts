@@ -5,6 +5,8 @@ import {
   enableNetwork,
   removeNetwork,
   getConnectedSSID as getCurrentSSID,
+  saveConfig,
+  listNetworks,
 } from './utils/cmd';
 import { EventEmitter } from 'events';
 import { logger } from './utils/logger';
@@ -87,12 +89,23 @@ export default class Network extends EventEmitter {
       } else {
         networkId = await addNetwork(this.ifName);
       }
+      const allNetworks = await listNetworks(this.ifName);
+      for (const item of allNetworks) {
+        if (item.networkId !== networkId) {
+          await removeNetwork(this.ifName, item.networkId);
+        }
+      }
 
       // Set credentials
       await setNetworkVariable(this.ifName, networkId, 'ssid', `'"${ssid}"'`);
-      await setNetworkVariable(this.ifName, networkId, 'psk', `'"${pwd}"'`);
+      if (pwd) {
+        await setNetworkVariable(this.ifName, networkId, 'psk', `'"${pwd}"'`);
+      } else {
+        await setNetworkVariable(this.ifName, networkId, 'key_mgmt', 'NONE');
+      }
 
       await enableNetwork(this.ifName, networkId);
+      await saveConfig(this.ifName, ssid, pwd);
     } catch (err) {
       // @ts-ignore
       if (networkId) {

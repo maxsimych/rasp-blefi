@@ -98,6 +98,13 @@ export async function enableNetwork(ifname: string, networkId: number) {
   return await executeWpa(ifname, 'enable_network', networkId);
 }
 
+export async function saveConfig(ifname: string, ssid: string, pwd: string) {
+  logger.info(
+    `sudo sh -c "wpa_passphrase '${ssid}' '${pwd}' >> /etc/wpa_supplicant/wpa_supplicant.conf"`
+  );
+  return await executeWpa(ifname, 'save_config');
+}
+
 export async function getConnectedSSID(ifname: string): Promise<string> {
   logger.info('get connected wifi network SSID', { ifname });
   return await executeCmd(...['iwgetid', '-r', ifname]);
