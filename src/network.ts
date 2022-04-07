@@ -81,20 +81,18 @@ export default class Network extends EventEmitter {
     logger.info('configure WIFI network', { ssid });
     let networkId: number;
     try {
-      const network = await findNetworkBySSID(this.ifName, ssid);
-
-      // Create or Update network
-      if (network.networkId) {
-        networkId = network.networkId;
-      } else {
-        networkId = await addNetwork(this.ifName);
-      }
       const allNetworks = await listNetworks(this.ifName);
       for (const item of allNetworks) {
-        if (item.networkId !== networkId) {
-          await removeNetwork(this.ifName, item.networkId);
-        }
+        await removeNetwork(this.ifName, item.networkId);
       }
+      // const network = await findNetworkBySSID(this.ifName, ssid);
+
+      // Create or Update network
+      // if (network.networkId) {
+      //   networkId = network.networkId;
+      // } else {
+      networkId = await addNetwork(this.ifName);
+      // }
 
       // Set credentials
       await setNetworkVariable(this.ifName, networkId, 'ssid', `'"${ssid}"'`);
@@ -105,7 +103,7 @@ export default class Network extends EventEmitter {
       }
 
       await enableNetwork(this.ifName, networkId);
-      await saveConfig(ssid, pwd);
+      // await saveConfig(ssid, pwd);
     } catch (err) {
       // @ts-ignore
       if (networkId) {
