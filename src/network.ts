@@ -69,6 +69,9 @@ export default class Network extends EventEmitter {
   async hasStatusChanged(oldStatus: NetworkStatus): Promise<boolean> {
     logger.info('check if network connection status has changed');
     const newStatus = await this.getStatus();
+    logger.info(
+      `status has changed, old status "${oldStatus}", newStatus "${newStatus}"`
+    );
     return newStatus !== oldStatus;
   }
 
