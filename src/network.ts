@@ -35,11 +35,14 @@ export default class Network extends EventEmitter {
     this.ifName = ifName;
 
     // Watch for status changing
-    setInterval(() => {
+    const id = setInterval(() => {
       logger.debug('watch for status change');
       const hasChange = this.hasStatusChanged(this.status);
       if (hasChange) {
         this.emit('statusChange', this.status, this.ssid);
+        if (this.status === 'connected') {
+          clearInterval(id);
+        }
       }
     }, 1000);
   }
