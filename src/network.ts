@@ -58,8 +58,7 @@ export default class Network extends EventEmitter {
   async getStatus(): Promise<NetworkStatus> {
     logger.info('get WIFI network connection status');
     const ssid = await this.getConnectedSSID();
-    this.status = ssid ? NetworkStatus.connected : NetworkStatus.disconnected;
-    return this.status;
+    return ssid ? NetworkStatus.connected : NetworkStatus.disconnected;
   }
 
   /**
@@ -69,10 +68,14 @@ export default class Network extends EventEmitter {
   async hasStatusChanged(oldStatus: NetworkStatus): Promise<boolean> {
     logger.info('check if network connection status has changed');
     const newStatus = await this.getStatus();
-    logger.info(
-      `status has changed, old status "${oldStatus}", newStatus "${newStatus}"`
-    );
-    return newStatus !== oldStatus;
+    const hasChanged = newStatus !== oldStatus;
+    if (hasChanged) {
+      logger.info(
+        `status has changed, old status "${oldStatus}", newStatus "${newStatus}"`
+      );
+      this.status = newStatus;
+    }
+    return hasChanged;
   }
 
   /**
