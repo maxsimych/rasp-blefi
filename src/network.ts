@@ -42,6 +42,7 @@ export default class Network extends EventEmitter {
         this.emit('statusChange', this.status, this.ssid);
         if (this.status === 'connected') {
           clearInterval(id);
+          this.emit('connected');
         }
       }
     }, 1000);

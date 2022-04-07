@@ -76,6 +76,11 @@ export class NetworkConfigurator extends EventEmitter {
     this.network.on('statusChange', (status, ssid) =>
       this.emit('statusChange', status, ssid)
     );
+
+    // Bubble up status change
+    this.network.on('connected', (status, ssid) =>
+      this.emit('connected', status, ssid)
+    );
   }
 
   /**
