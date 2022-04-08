@@ -115,8 +115,9 @@ export default class Network extends EventEmitter {
       }
 
       await enableNetwork(this.ifName, networkId);
-      // await saveConfig(ssid, pwd);
+      await saveConfig(ssid, pwd);
     } catch (err) {
+      logger.error(err);
       // @ts-ignore
       if (networkId) {
         await removeNetwork(this.ifName, networkId);
