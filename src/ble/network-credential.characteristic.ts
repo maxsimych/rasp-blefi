@@ -2,7 +2,7 @@ import bleno, { Characteristic } from '@abandonware/bleno';
 import utils from 'util';
 import Network from '../network';
 import { logger } from '../utils/logger';
-import decrypt from 'utils/decrypt';
+import decrypt from '../utils/decrypt';
 
 const key = process.env.ENCRYPTION_KEY || 'B?E(H+MbQeThWmZq';
 
