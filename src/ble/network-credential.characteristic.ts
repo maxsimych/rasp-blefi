@@ -2,6 +2,9 @@ import bleno, { Characteristic } from '@abandonware/bleno';
 import utils from 'util';
 import Network from '../network';
 import { logger } from '../utils/logger';
+import decrypt from 'utils/decrypt';
+
+const key = process.env.ENCRYPTION_KEY || 'B?E(H+MbQeThWmZq';
 
 /**
  * BLE characteristic for Network credential
@@ -31,27 +34,33 @@ function NetworkCredentialCharacteristic(network: Network) {
         cb(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
       } else {
         // Parse credentials
-        const credentials = data.toString('utf-8');
-        const [ssid, pwd] = credentials.split(' ');
+        try {
+          const credentials = decrypt(data, key);
+          logger.info(`DECRYPTED DATA: ${credentials}`);
+          // const credentials = data.toString('utf-8');
+          const [ssid, pwd] = credentials.split(' ');
 
-        // Input vaidations
-        if (!ssid) {
-          logger.error('network ssid is empty', { ssid });
-          cb(this.RESULT_UNLIKELY_ERROR);
-          return;
-        }
-
-        // Configue network
-        (this.network as Network)
-          .configureNetwork(ssid, pwd)
-          .then(() => {
-            logger.info('network successfully configured');
-            cb(this.RESULT_SUCCESS);
-          })
-          .catch((err: unknown) => {
-            logger.error('unable to configure network', { err });
+          // Input vaidations
+          if (!ssid) {
+            logger.error('network ssid is empty', { ssid });
             cb(this.RESULT_UNLIKELY_ERROR);
-          });
+            return;
+          }
+
+          // Configue network
+          (this.network as Network)
+            .configureNetwork(ssid, pwd)
+            .then(() => {
+              logger.info('network successfully configured');
+              cb(this.RESULT_SUCCESS);
+            })
+            .catch((err: unknown) => {
+              logger.error('unable to configure network', { err });
+              cb(this.RESULT_UNLIKELY_ERROR);
+            });
+        } catch (e) {
+          logger.error(e);
+        }
       }
     },
   });
