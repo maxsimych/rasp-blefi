@@ -5,7 +5,7 @@ import NetworkStatusCharacteristic from './network-status.characteristic';
 import NetworkCredentialCharacteristic from './network-credential.characteristic';
 import NetworkSsidCharacteristic from './network-ssid.characteristic';
 import CapabilitiesCharacteristic from './capabilities.characteristic';
-import CurrentStateCharacteristic from 'ble/currentState.characteristic';
+import CurrentStateCharacteristic from './currentState.characteristic';
 
 /**
  * BLE service for Network
