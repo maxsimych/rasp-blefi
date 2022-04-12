@@ -11,10 +11,13 @@ import {
 import { EventEmitter } from 'events';
 import { logger } from './utils/logger';
 
-export enum NetworkStatus {
-  authorized = 0x02,
-  provisioned = 0x04,
-}
+export const IMPROV_STATUS = {
+  authorized: 0x02,
+  provisioned: 0x04,
+} as const;
+
+export type ImprovStatusKeys = keyof typeof IMPROV_STATUS;
+export type ImprovStatus = typeof IMPROV_STATUS[ImprovStatusKeys];
 
 /**
  * Represent network
@@ -28,7 +31,7 @@ export default class Network extends EventEmitter {
   private ssid: string = '';
 
   // @ts-ignore
-  private status: NetworkStatus;
+  private status: IMPROV_STATUS;
 
   constructor(ifName: string) {
     super();
@@ -40,7 +43,7 @@ export default class Network extends EventEmitter {
       const hasChange = this.hasStatusChanged(this.status);
       if (hasChange) {
         this.emit('statusChange', this.status, this.ssid);
-        if (this.status === NetworkStatus.provisioned) {
+        if (this.status === IMPROV_STATUS.provisioned) {
           setTimeout(() => {
             clearInterval(id);
             this.emit('connected');
@@ -61,17 +64,17 @@ export default class Network extends EventEmitter {
   /**
    * Get current network connection status
    */
-  async getStatus(): Promise<NetworkStatus> {
+  async getStatus(): Promise<ImprovStatus> {
     logger.info('get WIFI network connection status');
     const ssid = await this.getConnectedSSID();
-    return ssid ? NetworkStatus.provisioned : NetworkStatus.authorized;
+    return ssid ? IMPROV_STATUS.provisioned : IMPROV_STATUS.authorized;
   }
 
   /**
    * Compare old status with new status
    * @param oldStatus - old status
    */
-  async hasStatusChanged(oldStatus: NetworkStatus): Promise<boolean> {
+  async hasStatusChanged(oldStatus: ImprovStatus): Promise<boolean> {
     logger.info('check if network connection status has changed');
     const newStatus = await this.getStatus();
     const hasChanged = newStatus !== oldStatus;

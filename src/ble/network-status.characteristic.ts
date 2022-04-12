@@ -1,6 +1,6 @@
 import bleno, { Characteristic } from '@abandonware/bleno';
 import utils from 'util';
-import Network, { NetworkStatus } from '../network';
+import Network, { IMPROV_STATUS, ImprovStatus } from '../network';
 import { logger } from '../utils/logger';
 
 /**
@@ -36,7 +36,7 @@ function NetworkStatusCharacteristic(network: Network) {
       this._updateValueCb = updateValueCb;
 
       // listen for status change
-      this.network.on('statusChange', (status: NetworkStatus) => {
+      this.network.on('statusChange', (status: ImprovStatus) => {
         this._updateValueCb(Buffer.from([status]));
       });
     },

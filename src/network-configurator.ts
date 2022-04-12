@@ -1,7 +1,11 @@
 import { EventEmitter } from 'events';
 import bleno from '@abandonware/bleno';
 import NetworkService from './ble/network.service';
-import Network from './network';
+import Network, {
+  IMPROV_STATUS,
+  ImprovStatus,
+  ImprovStatusKeys,
+} from './network';
 import { logger } from './utils/logger';
 
 /**
@@ -78,8 +82,15 @@ export class NetworkConfigurator extends EventEmitter {
     );
 
     // Bubble up status change
-    this.network.on('connected', (status, ssid) =>
-      this.emit('connected', status, ssid)
+    this.network.on('connected', (status, ssid) => {
+      const statusName = NetworkConfigurator.getStatusName(status);
+      this.emit('connected', statusName, ssid);
+    });
+  }
+
+  private static getStatusName(status: ImprovStatus) {
+    return Object.keys(IMPROV_STATUS).find(
+      key => IMPROV_STATUS[key as ImprovStatusKeys] === status
     );
   }
 

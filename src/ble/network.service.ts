@@ -1,11 +1,9 @@
 import bleno, { PrimaryService } from '@abandonware/bleno';
 import utils from 'util';
 import Network from '../network';
-import NetworkStatusCharacteristic from './network-status.characteristic';
-import NetworkCredentialCharacteristic from './network-credential.characteristic';
-import NetworkSsidCharacteristic from './network-ssid.characteristic';
 import CapabilitiesCharacteristic from './capabilities.characteristic';
 import CurrentStateCharacteristic from './currentState.characteristic';
+import RpcCommandCharacteristic from 'ble/rpcCommand.characteristic';
 
 /**
  * BLE service for Network
@@ -21,11 +19,13 @@ function NetworkService(network: Network) {
       // @ts-ignore
       new CapabilitiesCharacteristic(network),
       // @ts-ignore
-      new NetworkStatusCharacteristic(network),
+      new RpcCommandCharacteristic(network),
       // @ts-ignore
-      new NetworkCredentialCharacteristic(network),
+      // new NetworkStatusCharacteristic(network),
       // @ts-ignore
-      new NetworkSsidCharacteristic(network),
+      // new NetworkCredentialCharacteristic(network),
+      // @ts-ignore
+      // new NetworkSsidCharacteristic(network),
     ],
   });
 }
