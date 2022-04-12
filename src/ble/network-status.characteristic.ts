@@ -25,7 +25,7 @@ function NetworkStatusCharacteristic(network: Network) {
       logger.info('bluetooth on read request network status characateristic');
       (this.network as Network)
         .getStatus()
-        .then(status => cb(this.RESULT_SUCCESS, Buffer.from(status)))
+        .then(status => cb(this.RESULT_SUCCESS, Buffer.from([status])))
         .catch((err: unknown) => {
           logger.error('unable to get network status', { err });
           cb(this.RESULT_UNLIKELY_ERROR);
