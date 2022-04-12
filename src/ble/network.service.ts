@@ -4,6 +4,8 @@ import Network from '../network';
 import NetworkStatusCharacteristic from './network-status.characteristic';
 import NetworkCredentialCharacteristic from './network-credential.characteristic';
 import NetworkSsidCharacteristic from './network-ssid.characteristic';
+import CapabilitiesCharacteristic from './capabilities.characteristic';
+import CurrentStateCharacteristic from 'ble/currentState.characteristic';
 
 /**
  * BLE service for Network
@@ -11,8 +13,13 @@ import NetworkSsidCharacteristic from './network-ssid.characteristic';
  */
 function NetworkService(network: Network) {
   bleno.PrimaryService.call(this, {
-    uuid: 'fff1',
+    // UUID in accordance with https://www.improv-wifi.com/ble/
+    uuid: '00467768-6228-2272-4663-277478268000',
     characteristics: [
+      // @ts-ignore
+      new CurrentStateCharacteristic(network),
+      // @ts-ignore
+      new CapabilitiesCharacteristic(network),
       // @ts-ignore
       new NetworkStatusCharacteristic(network),
       // @ts-ignore

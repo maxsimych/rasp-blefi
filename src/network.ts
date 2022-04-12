@@ -12,8 +12,8 @@ import { EventEmitter } from 'events';
 import { logger } from './utils/logger';
 
 export enum NetworkStatus {
-  connected = 'connected',
-  disconnected = 'disconnected',
+  authorized = 0x02,
+  provisioned = 0x04,
 }
 
 /**
@@ -40,7 +40,7 @@ export default class Network extends EventEmitter {
       const hasChange = this.hasStatusChanged(this.status);
       if (hasChange) {
         this.emit('statusChange', this.status, this.ssid);
-        if (this.status === 'connected') {
+        if (this.status === NetworkStatus.provisioned) {
           setTimeout(() => {
             clearInterval(id);
             this.emit('connected');
@@ -64,7 +64,7 @@ export default class Network extends EventEmitter {
   async getStatus(): Promise<NetworkStatus> {
     logger.info('get WIFI network connection status');
     const ssid = await this.getConnectedSSID();
-    return ssid ? NetworkStatus.connected : NetworkStatus.disconnected;
+    return ssid ? NetworkStatus.provisioned : NetworkStatus.authorized;
   }
 
   /**
