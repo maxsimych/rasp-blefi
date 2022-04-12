@@ -22,7 +22,7 @@ function NetworkStatusCharacteristic(network: Network) {
       }),
     ],
     onReadRequest: (_offset: number, cb: Function) => {
-      logger.info('bluetooth on read request network status characateristic');
+      logger.info('bluetooth on read request network status characteristic');
       (this.network as Network)
         .getStatus()
         .then(status => cb(this.RESULT_SUCCESS, Buffer.from([status])))
@@ -32,12 +32,12 @@ function NetworkStatusCharacteristic(network: Network) {
         });
     },
     onSubscribe: (_maxValueSize: number, updateValueCb: Function) => {
-      logger.info('bluetooth on subscribe network status characateristic');
+      logger.info('bluetooth on subscribe network status characteristic');
       this._updateValueCb = updateValueCb;
 
       // listen for status change
       this.network.on('statusChange', (status: NetworkStatus) => {
-        this._updateValueCb(Buffer.from(status));
+        this._updateValueCb(Buffer.from([status]));
       });
     },
   });
