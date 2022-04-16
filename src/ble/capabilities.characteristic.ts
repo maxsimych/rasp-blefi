@@ -8,7 +8,7 @@ function CapabilitiesCharacteristic(network: Network) {
     uuid: '00467768-6228-2272-4663-277478268005',
     properties: ['read'],
     descriptors: [],
-    value: Buffer.from([0x01]),
+    value: Buffer.from([0x00]),
   });
 }
 

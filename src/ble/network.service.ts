@@ -4,6 +4,7 @@ import Network from '../network';
 import CapabilitiesCharacteristic from './capabilities.characteristic';
 import CurrentStateCharacteristic from './currentState.characteristic';
 import RpcCommandCharacteristic from 'ble/rpcCommand.characteristic';
+import ErrorStateCharacteristic from 'ble/errorState.characteristic';
 
 /**
  * BLE service for Network
@@ -21,6 +22,7 @@ function NetworkService(network: Network) {
       // @ts-ignore
       new RpcCommandCharacteristic(network),
       // @ts-ignore
+      new ErrorStateCharacteristic(network),
       // new NetworkStatusCharacteristic(network),
       // @ts-ignore
       // new NetworkCredentialCharacteristic(network),
