@@ -3,8 +3,8 @@ import utils from 'util';
 import Network from '../network';
 import CapabilitiesCharacteristic from './capabilities.characteristic';
 import CurrentStateCharacteristic from './currentState.characteristic';
-import RpcCommandCharacteristic from 'ble/rpcCommand.characteristic';
-import ErrorStateCharacteristic from 'ble/errorState.characteristic';
+import RpcCommandCharacteristic from './rpcCommand.characteristic';
+import ErrorStateCharacteristic from './errorState.characteristic';
 
 /**
  * BLE service for Network
