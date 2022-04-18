@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import { logger } from './logger';
 
 const ALGORITHM = 'aes128';
-const OUTPUT_ENCODING = 'utf8';
 const IV_LENGTH = 16;
 
 export default function decrypt(encrypted: Buffer, key: string) {
@@ -14,7 +13,7 @@ export default function decrypt(encrypted: Buffer, key: string) {
   // const iv = Buffer.from(ivString);
   // const data = encrypted;
   const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
-  let decrypted = decipher.update(data, undefined, OUTPUT_ENCODING);
-  decrypted += decipher.final(OUTPUT_ENCODING);
+  let decrypted = decipher.update(data);
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted;
 }

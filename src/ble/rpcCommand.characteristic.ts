@@ -10,6 +10,33 @@ const key = process.env.ENCRYPTION_KEY || 'B?E(H+MbQeThWmZq';
 let msg = Buffer.from([]);
 let msgKey: number | undefined = undefined;
 
+function handleRpcCommand(buffer: Buffer) {
+  const firstByte = buffer.readUInt8();
+  if (firstByte === 0x02) {
+    throw new Error('Identify command is not supported');
+  } else if (firstByte !== 0x01) {
+    throw new Error(`Unknown command ${firstByte}`);
+  }
+  const dataLength = buffer.readUInt8(1);
+  const data = buffer.subarray(2, dataLength + 2);
+  const ssidLength = data.readUInt8();
+  logger.info(`ssid length is ${ssidLength}`);
+  const ssid = data.subarray(1, dataLength + 1);
+  const ssidString = ssid.toString('utf8');
+  console.log(`ssid string is ${ssidString}`);
+  const passwordLength = data.readUInt8(dataLength + 2);
+  logger.info(`password length ${passwordLength}`);
+  const password = data.subarray(passwordLength + 3, passwordLength + 3);
+  const passwordString = password.toString('utf8');
+  console.log(`password string is ${passwordString}`);
+  const checksum = buffer.readUInt8(buffer.length - 1);
+  logger.info(`checksum is ${checksum}`);
+  return {
+    ssid: ssidString,
+    password: passwordString,
+  };
+}
+
 /**
  * BLE characteristic for Network credential
  * @param network - network
@@ -48,9 +75,8 @@ function RpcCommandCharacteristic(network: Network) {
           // Parse credentials
           try {
             const credentials = decrypt(msg, key);
-            logger.info(`DECRYPTED DATA: ${credentials}`);
             // const credentials = data.toString('utf-8');
-            const [ssid, pwd] = credentials.split(' ');
+            const { ssid, password: pwd } = handleRpcCommand(credentials);
 
             // Input vaidations
             if (!ssid) {
