@@ -23,11 +23,6 @@ function NetworkService(network: Network) {
       new RpcCommandCharacteristic(network),
       // @ts-ignore
       new ErrorStateCharacteristic(network),
-      // new NetworkStatusCharacteristic(network),
-      // @ts-ignore
-      // new NetworkCredentialCharacteristic(network),
-      // @ts-ignore
-      // new NetworkSsidCharacteristic(network),
     ],
   });
 }

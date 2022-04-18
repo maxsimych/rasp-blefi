@@ -5,6 +5,7 @@ import { logger } from '../utils/logger';
 import decrypt from '../utils/decrypt';
 
 const CHUNK_FINAL_PACKAGE = 0x02;
+const IMPROV_IDENTITY_COMMAND = 0x02;
 
 const key = process.env.ENCRYPTION_KEY || 'B?E(H+MbQeThWmZq';
 let msg = Buffer.from([]);
@@ -12,28 +13,30 @@ let msgKey: number | undefined = undefined;
 
 function handleRpcCommand(buffer: Buffer) {
   const firstByte = buffer.readUInt8();
-  if (firstByte === 0x02) {
-    throw new Error('Identify command is not supported');
+  if (firstByte === IMPROV_IDENTITY_COMMAND) {
+    throw new Error('Identity command is not supported');
   } else if (firstByte !== 0x01) {
     throw new Error(`Unknown command ${firstByte}`);
+  }
+  const checksum = buffer.readUInt8(buffer.length - 1);
+  const sum = buffer
+    .subarray(0, buffer.length - 1)
+    .reduce((sum, cur) => sum + cur, 0);
+  const newChecksum = sum & 0xff;
+  if (newChecksum !== checksum) {
+    throw new Error("Checksum doesn't match");
   }
   const dataLength = buffer.readUInt8(1);
   const data = buffer.subarray(2, dataLength + 2);
   const ssidLength = data.readUInt8();
-  logger.info(`ssid length is ${ssidLength}`);
   const ssid = data.subarray(1, ssidLength + 1);
   const ssidString = ssid.toString('utf8');
-  console.log(`ssid string is ${ssidString}`);
   const passwordLength = data.readUInt8(ssidLength + 1);
-  logger.info(`password length ${passwordLength}`);
   const password = data.subarray(
     ssidLength + 2,
     ssidLength + passwordLength + 2
   );
   const passwordString = password.toString('utf8');
-  console.log(`password string is ${passwordString}`);
-  const checksum = buffer.readUInt8(buffer.length - 1);
-  logger.info(`checksum is ${checksum}`);
   return {
     ssid: ssidString,
     password: passwordString,
@@ -57,8 +60,6 @@ function RpcCommandCharacteristic(network: Network) {
       cb: Function
     ) => {
       logger.info('bluetooth read network credential characteristic');
-      logger.info(`msg length is ${msg.length}`);
-      logger.info(`msg key is ${msgKey}`);
       if (offset) {
         cb(this.RESULT_ATTR_NOT_LONG);
       } else if (data.length > 32 || data.length <= 0) {

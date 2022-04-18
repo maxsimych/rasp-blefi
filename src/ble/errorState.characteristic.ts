@@ -14,14 +14,6 @@ function ErrorStateCharacteristic(network: Network) {
     onReadRequest: (_offset: number, cb: Function) => {
       logger.info('[ErrorStateCharacteristic] Read request');
       cb(this.RESULT_SUCCESS, Buffer.from([0x00]));
-      // logger.info('bluetooth on read request network status characteristic');
-      // (this.network as Network)
-      //   .getStatus()
-      //   .then(status => cb(this.RESULT_SUCCESS, Buffer.from([status])))
-      //   .catch((err: unknown) => {
-      //     logger.error('unable to get network status', { err });
-      //     cb(this.RESULT_UNLIKELY_ERROR);
-      //   });
     },
     onSubscribe: (_maxValueSize: number, updateValueCb: Function) => {
       logger.info('[ErrorStateCharacteristic] Subscribe request');
@@ -29,11 +21,6 @@ function ErrorStateCharacteristic(network: Network) {
       setInterval(() => {
         this._updateValueCb(Buffer.from([0x00]));
       }, 1000);
-
-      // listen for status change
-      // this.network.on('statusChange', (status: ImprovStatus) => {
-      //   this._updateValueCb(Buffer.from([status]));
-      // });
     },
   });
 }
