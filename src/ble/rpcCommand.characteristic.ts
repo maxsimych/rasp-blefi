@@ -27,6 +27,8 @@ function RpcCommandCharacteristic(network: Network) {
       cb: Function
     ) => {
       logger.info('bluetooth read network credential characateristic');
+      logger.info(msg);
+      logger.info(msgKey);
       if (offset) {
         cb(this.RESULT_ATTR_NOT_LONG);
       } else if (data.length > 32 || data.length <= 0) {
@@ -70,7 +72,10 @@ function RpcCommandCharacteristic(network: Network) {
               });
           } catch (e) {
             logger.error(e);
+            cb(this.RESULT_UNLIKE_ERROR);
           }
+        } else {
+          cb(this.RESULT_SUCCESS);
         }
       }
     },
