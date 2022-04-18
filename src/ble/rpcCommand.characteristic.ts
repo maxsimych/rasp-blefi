@@ -26,7 +26,10 @@ function handleRpcCommand(buffer: Buffer) {
   console.log(`ssid string is ${ssidString}`);
   const passwordLength = data.readUInt8(ssidLength + 1);
   logger.info(`password length ${passwordLength}`);
-  const password = data.subarray(ssidLength + 2, passwordLength + 2);
+  const password = data.subarray(
+    ssidLength + 2,
+    ssidLength + passwordLength + 2
+  );
   const passwordString = password.toString('utf8');
   console.log(`password string is ${passwordString}`);
   const checksum = buffer.readUInt8(buffer.length - 1);
