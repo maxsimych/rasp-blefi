@@ -21,12 +21,12 @@ function handleRpcCommand(buffer: Buffer) {
   const data = buffer.subarray(2, dataLength + 2);
   const ssidLength = data.readUInt8();
   logger.info(`ssid length is ${ssidLength}`);
-  const ssid = data.subarray(1, dataLength + 1);
+  const ssid = data.subarray(1, ssidLength + 1);
   const ssidString = ssid.toString('utf8');
   console.log(`ssid string is ${ssidString}`);
-  const passwordLength = data.readUInt8(dataLength + 2);
+  const passwordLength = data.readUInt8(ssidLength + 2);
   logger.info(`password length ${passwordLength}`);
-  const password = data.subarray(passwordLength + 3, passwordLength + 3);
+  const password = data.subarray(ssidLength + 3, passwordLength + 3);
   const passwordString = password.toString('utf8');
   console.log(`password string is ${passwordString}`);
   const checksum = buffer.readUInt8(buffer.length - 1);
