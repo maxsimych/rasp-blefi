@@ -24,9 +24,9 @@ function handleRpcCommand(buffer: Buffer) {
   const ssid = data.subarray(1, ssidLength + 1);
   const ssidString = ssid.toString('utf8');
   console.log(`ssid string is ${ssidString}`);
-  const passwordLength = data.readUInt8(ssidLength + 2);
+  const passwordLength = data.readUInt8(ssidLength + 1);
   logger.info(`password length ${passwordLength}`);
-  const password = data.subarray(ssidLength + 3, passwordLength + 3);
+  const password = data.subarray(ssidLength + 2, passwordLength + 2);
   const passwordString = password.toString('utf8');
   console.log(`password string is ${passwordString}`);
   const checksum = buffer.readUInt8(buffer.length - 1);
@@ -53,9 +53,9 @@ function RpcCommandCharacteristic(network: Network) {
       _withoutResponse: any,
       cb: Function
     ) => {
-      logger.info('bluetooth read network credential characateristic');
-      logger.info(msg);
-      logger.info(msgKey);
+      logger.info('bluetooth read network credential characteristic');
+      logger.info(`msg length is ${msg.length}`);
+      logger.info(`msg key is ${msgKey}`);
       if (offset) {
         cb(this.RESULT_ATTR_NOT_LONG);
       } else if (data.length > 32 || data.length <= 0) {
