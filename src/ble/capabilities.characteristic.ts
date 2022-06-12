@@ -1,5 +1,5 @@
 import utils from 'util';
-import bleno, { Characteristic } from '@abandonware/bleno';
+import bleno from '@abandonware/bleno';
 import Network from '../network';
 
 function CapabilitiesCharacteristic(network: Network) {
@@ -12,6 +12,6 @@ function CapabilitiesCharacteristic(network: Network) {
   });
 }
 
-utils.inherits(CapabilitiesCharacteristic, Characteristic);
+utils.inherits(CapabilitiesCharacteristic, bleno.Characteristic);
 
 export default CapabilitiesCharacteristic;

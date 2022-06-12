@@ -1,4 +1,4 @@
-import bleno, { PrimaryService } from '@abandonware/bleno';
+import bleno from '@abandonware/bleno';
 import utils from 'util';
 import Network from '../network';
 import CapabilitiesCharacteristic from './capabilities.characteristic';
@@ -27,6 +27,6 @@ function NetworkService(network: Network) {
   });
 }
 
-utils.inherits(NetworkService, PrimaryService);
+utils.inherits(NetworkService, bleno.PrimaryService);
 
 export default NetworkService;

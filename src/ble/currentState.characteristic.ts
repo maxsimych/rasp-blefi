@@ -1,5 +1,5 @@
 import utils from 'util';
-import bleno, { Characteristic } from '@abandonware/bleno';
+import bleno from '@abandonware/bleno';
 import Network, { ImprovStatus } from '../network';
 import { logger } from '../utils/logger';
 
@@ -33,6 +33,6 @@ function CurrentStateCharacteristic(network: Network) {
   });
 }
 
-utils.inherits(CurrentStateCharacteristic, Characteristic);
+utils.inherits(CurrentStateCharacteristic, bleno.Characteristic);
 
 export default CurrentStateCharacteristic;

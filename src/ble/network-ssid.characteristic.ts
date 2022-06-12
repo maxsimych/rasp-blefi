@@ -1,4 +1,4 @@
-import bleno, { Characteristic } from '@abandonware/bleno';
+import bleno from '@abandonware/bleno';
 import utils from 'util';
 import Network from '../network';
 import { logger } from '../utils/logger';
@@ -32,6 +32,6 @@ function NetworkSsidCharacteristic(network: Network) {
   });
 }
 
-utils.inherits(NetworkSsidCharacteristic, Characteristic);
+utils.inherits(NetworkSsidCharacteristic, bleno.Characteristic);
 
 export default NetworkSsidCharacteristic;

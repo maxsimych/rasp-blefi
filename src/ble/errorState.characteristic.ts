@@ -1,5 +1,5 @@
 import utils from 'util';
-import bleno, { Characteristic } from '@abandonware/bleno';
+import bleno from '@abandonware/bleno';
 import Network, { IMPROV_STATUS, ImprovStatus } from '../network';
 import { logger } from '../utils/logger';
 
@@ -25,6 +25,6 @@ function ErrorStateCharacteristic(network: Network) {
   });
 }
 
-utils.inherits(ErrorStateCharacteristic, Characteristic);
+utils.inherits(ErrorStateCharacteristic, bleno.Characteristic);
 
 export default ErrorStateCharacteristic;

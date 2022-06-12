@@ -1,4 +1,4 @@
-import bleno, { Characteristic } from '@abandonware/bleno';
+import bleno from '@abandonware/bleno';
 import utils from 'util';
 import Network from '../network';
 import { logger } from '../utils/logger';
@@ -112,6 +112,6 @@ function RpcCommandCharacteristic(network: Network) {
   });
 }
 
-utils.inherits(RpcCommandCharacteristic, Characteristic);
+utils.inherits(RpcCommandCharacteristic, bleno.Characteristic);
 
 export default RpcCommandCharacteristic;
