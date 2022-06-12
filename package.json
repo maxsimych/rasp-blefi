@@ -39,7 +39,9 @@
     "ble",
     "bleno"
   ],
-  "module": "dist/rasp-bluefi.esm.js",
+  "exports": {
+    "default": "./dist/rasp-blefi.esm.js"
+  },
   "devDependencies": {
     "@types/node": "^14.0.13",
     "husky": "^4.2.5",
